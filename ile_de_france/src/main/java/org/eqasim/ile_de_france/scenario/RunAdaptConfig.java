@@ -33,7 +33,7 @@ public class RunAdaptConfig {
 				.get(DiscreteModeChoiceConfigGroup.GROUP_NAME);
 
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
-
+		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
