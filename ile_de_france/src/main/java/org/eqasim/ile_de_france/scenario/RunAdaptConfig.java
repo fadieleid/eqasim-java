@@ -12,6 +12,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.config.groups.QSimConfigGroup.VehiclesSource;
 import org.matsim.core.config.groups.VehiclesConfigGroup;
+import org.matsim.core.config.groups.ScoringConfigGroup;
 
 public class RunAdaptConfig {
 	static public void main(String[] args) throws ConfigurationException {
@@ -35,6 +36,14 @@ public class RunAdaptConfig {
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
 		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
+
+		// Map bicycle mode to bike mode
+		ScoringConfigGroup scoringConfig = (ScoringConfigGroup) config.getModules().get(ScoringConfigGroup.GROUP_NAME);
+		for (ScoringConfigGroup.ModeParams params : scoringConfig.getModes().values()) {
+			if (params.getMode().equals("bicycle")) {
+				params.setMode("bike");
+			}
+		}
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
