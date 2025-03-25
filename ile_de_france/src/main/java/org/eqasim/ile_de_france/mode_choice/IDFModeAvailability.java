@@ -35,6 +35,7 @@ public class IDFModeAvailability implements ModeAvailability {
 		// Modes that are always available
 		modes.add(TransportMode.walk);
 		modes.add(TransportMode.pt);
+		modes.add("bicycle");
 
 		// Check car availability
 		boolean carAvailability = true;
