@@ -1,5 +1,9 @@
 package org.eqasim.ile_de_france.scenario;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eqasim.core.components.config.ConfigAdapter;
 import org.eqasim.core.components.config.EqasimConfigGroup;
 import org.eqasim.ile_de_france.IDFConfigurator;
@@ -35,6 +39,13 @@ public class RunAdaptConfig {
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
 		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
+
+
+        // Add bicycle to cached modes
+        Set<String> cachedModes = new HashSet<>(dmcConfig.getCachedModes());
+        cachedModes.add("bicycle");
+        dmcConfig.setCachedModes(cachedModes);
+
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
