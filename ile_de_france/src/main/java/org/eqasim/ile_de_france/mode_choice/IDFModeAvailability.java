@@ -35,7 +35,6 @@ public class IDFModeAvailability implements ModeAvailability {
 		// Modes that are always available
 		modes.add(TransportMode.walk);
 		modes.add(TransportMode.pt);
-		modes.add("bicycle");
 
 		// Check car availability
 		boolean carAvailability = true;
@@ -77,6 +76,13 @@ public class IDFModeAvailability implements ModeAvailability {
 			modes.add("car_passenger");
 		}
 		
+
+		// Add bicycle to available modes
+		Boolean hasBicycle = (Boolean) person.getAttributes().getAttribute("bicycleAvailability");
+		if (hasBicycle != null && hasBicycle) {
+			modes.add("bicycle");
+		}
+
 		// Add DRT modes
 		modes.addAll(this.drtModes);
 
