@@ -18,6 +18,9 @@ import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.config.groups.QSimConfigGroup.VehiclesSource;
 import org.matsim.core.config.groups.VehiclesConfigGroup;
 import org.matsim.core.config.groups.RoutingConfigGroup.TeleportedModeParams;
+import org.matsim.core.config.groups.ScoringConfigGroup;
+import org.matsim.core.config.groups.ScoringConfigGroup.ActivityParams;
+import org.matsim.core.config.groups.ScoringConfigGroup.ModeParams;
 
 public class RunAdaptConfig {
 	static public void main(String[] args) throws ConfigurationException {
@@ -71,5 +74,18 @@ public class RunAdaptConfig {
 		terminationConfig.setModes(Arrays.asList("car", "car_passenger", "pt", "bicycle", "walk", "drt"));
 
 		// Scoring config
+		ScoringConfigGroup scoringConfig = config.scoring();
+		
+		// Add bicycle mode parameters
+		ModeParams bicycleModeParams = new ModeParams("bicycle");
+		bicycleModeParams.setConstant(0.0);
+		bicycleModeParams.setMarginalUtilityOfDistance(0.0);
+		bicycleModeParams.setMarginalUtilityOfTraveling(0.0);
+		scoringConfig.addModeParams(bicycleModeParams);
+
+		// Add bicycle interaction activity
+		ActivityParams bicycleInteractionParams = new ActivityParams("bicycle interaction");
+		bicycleInteractionParams.setTypicalDuration(0.0);
+		scoringConfig.addActivityParams(bicycleInteractionParams);
 	}
 }
