@@ -38,23 +38,27 @@ public class RunAdaptConfig {
 		eqasimConfig.setEstimator(TransportMode.car, IDFModeChoiceModule.CAR_ESTIMATOR_NAME);
 		eqasimConfig.setEstimator(TransportMode.bike, IDFModeChoiceModule.BIKE_ESTIMATOR_NAME);
 		eqasimConfig.setEstimator(TransportMode.drt, IDFModeChoiceModule.DRT_ESTIMATOR_NAME);
+		eqasimConfig.setEstimator("bicycle", "ZeroUtilityEstimator");
 
 		DiscreteModeChoiceConfigGroup dmcConfig = (DiscreteModeChoiceConfigGroup) config.getModules()
 				.get(DiscreteModeChoiceConfigGroup.GROUP_NAME);
 
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
-		// dmcConfig.setSelector("MultinomialLogit");
+		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
 
-        // Add bicycle to cached modes
-        Set<String> cachedModes = new HashSet<>(dmcConfig.getCachedModes());
-        cachedModes.add("bicycle");
-        dmcConfig.setCachedModes(cachedModes);
+		// Add bicycle to cached modes
+		Set<String> cachedModes = new HashSet<>(dmcConfig.getCachedModes());
+		cachedModes.add("bicycle");
+		dmcConfig.setCachedModes(cachedModes);
 
-        // Add bicycle to teleported modes
-        TeleportedModeParams bicycleParams = config.routing().getOrCreateModeRoutingParams("bicycle");
-        bicycleParams.setBeelineDistanceFactor(1.4);
-        bicycleParams.setTeleportedModeSpeed(4.166666666666667);
+		// Add bicycle to teleported modes
+		TeleportedModeParams bicycleParams = config.routing().getOrCreateModeRoutingParams("bicycle");
+		bicycleParams.setBeelineDistanceFactor(1.4);
+		bicycleParams.setTeleportedModeSpeed(4.166666666666667);
+
+		// Update VehicleContinuity constraint to include bicycle
+		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle", "car"));
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
@@ -85,7 +89,7 @@ public class RunAdaptConfig {
 
 		// Add bicycle interaction activity
 		ActivityParams bicycleInteractionParams = new ActivityParams("bicycle interaction");
-		bicycleInteractionParams.setTypicalDuration(0.0);
+		bicycleInteractionParams.setTypicalDuration(1.0);
 		scoringConfig.addActivityParams(bicycleInteractionParams);
 	}
 }
