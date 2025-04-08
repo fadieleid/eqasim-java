@@ -10,6 +10,7 @@ import org.eqasim.core.simulation.termination.EqasimTerminationConfigGroup;
 import org.eqasim.ile_de_france.IDFConfigurator;
 import org.eqasim.ile_de_france.mode_choice.IDFModeChoiceModule;
 import org.matsim.api.core.v01.TransportMode;
+import org.matsim.contribs.discrete_mode_choice.model.DiscreteModeChoiceModel;
 import org.matsim.contribs.discrete_mode_choice.modules.config.DiscreteModeChoiceConfigGroup;
 import org.matsim.core.config.CommandLine;
 import org.matsim.core.config.CommandLine.ConfigurationException;
@@ -44,7 +45,7 @@ public class RunAdaptConfig {
 				.get(DiscreteModeChoiceConfigGroup.GROUP_NAME);
 
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
-		//dmcConfig.setSelector("MultinomialLogit");
+		dmcConfig.setSelector("Maximum");
 		// Calibration results for 5%
 
 		// Add bicycle to cached modes
@@ -59,6 +60,9 @@ public class RunAdaptConfig {
 
 		// Configure VehicleContinuity constraint
 		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle", "car"));
+
+		// Configure trip constraints
+		dmcConfig.setTripConstraints(Arrays.asList("DrtWalkConstraint", "OutsideConstraint", "TransitWalk"));
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
