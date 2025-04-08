@@ -44,7 +44,7 @@ public class RunAdaptConfig {
 				.get(DiscreteModeChoiceConfigGroup.GROUP_NAME);
 
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
-		dmcConfig.setSelector("MultinomialLogit");
+		//dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
 
 		// Add bicycle to cached modes
@@ -58,7 +58,7 @@ public class RunAdaptConfig {
 		bicycleParams.setTeleportedModeSpeed(4.166666666666667);
 
 		// Configure VehicleContinuity constraint
-		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle"));
+		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle", "car"));
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
@@ -84,7 +84,7 @@ public class RunAdaptConfig {
 		ModeParams bicycleModeParams = new ModeParams("bicycle");
 		bicycleModeParams.setConstant(0.0);
 		bicycleModeParams.setMarginalUtilityOfDistance(0.0);
-		bicycleModeParams.setMarginalUtilityOfTraveling(0.0);
+		bicycleModeParams.setMarginalUtilityOfTraveling(-1.0);
 		scoringConfig.addModeParams(bicycleModeParams);
 
 		// Add bicycle interaction activity
