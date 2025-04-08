@@ -95,10 +95,10 @@ public class IDFModeAvailability implements ModeAvailability {
 		modes.addAll(this.drtModes);
 
 		// Ensure at least one mode is always available
-		//if (modes.isEmpty()) {
-		//	modes.add(TransportMode.walk);
-		//	modes.add(TransportMode.pt);
-		//}
+		if (modes.isEmpty()) {
+			modes.add(TransportMode.walk);
+			modes.add(TransportMode.pt);
+		}
 
 		return modes;
 	}
