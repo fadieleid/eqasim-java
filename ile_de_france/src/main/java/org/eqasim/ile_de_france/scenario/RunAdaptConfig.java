@@ -57,8 +57,8 @@ public class RunAdaptConfig {
 		bicycleParams.setBeelineDistanceFactor(1.4);
 		bicycleParams.setTeleportedModeSpeed(4.166666666666667);
 
-		// Update VehicleContinuity constraint to include bicycle
-		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle", "car"));
+		// Configure VehicleContinuity constraint
+		dmcConfig.getVehicleTourConstraintConfig().setRestrictedModes(Arrays.asList("bicycle"));
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
