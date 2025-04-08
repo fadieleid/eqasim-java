@@ -78,8 +78,16 @@ public class IDFModeAvailability implements ModeAvailability {
 		
 
 		// Add bicycle to available modes
-		Boolean hasBicycle = (Boolean) person.getAttributes().getAttribute("bicycleAvailability");
-		if (hasBicycle != null && hasBicycle) {
+		Object bicycleAttr = person.getAttributes().getAttribute("bicycleAvailability");
+		boolean hasBicycle = false;
+		
+		if (bicycleAttr instanceof Boolean) {
+			hasBicycle = (Boolean) bicycleAttr;
+		} else if (bicycleAttr instanceof String) {
+			hasBicycle = "true".equalsIgnoreCase((String) bicycleAttr);
+		}
+		
+		if (hasBicycle) {
 			modes.add("bicycle");
 		}
 
