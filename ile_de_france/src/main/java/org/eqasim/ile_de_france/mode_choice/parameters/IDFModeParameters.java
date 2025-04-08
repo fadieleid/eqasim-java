@@ -12,8 +12,16 @@ public class IDFModeParameters extends ModeParameters {
 		public double betaInsideUrbanArea;
 	}
 
+	public static class DrtParameters {
+		public double alpha_u = 0.0; // Base utility
+		public double betaTravelTime_u_min = -0.5; // Less negative than car (-1.0)
+		public double betaWaitingTime_u_min = -0.8; // Less negative than PT (-1.0)
+		public double betaAccessEgressTime_u_min = -0.6; // Less negative than PT (-1.0)
+	}
+
 	public final IDFCarParameters idfCar = new IDFCarParameters();
 	public final IDFBikeParameters idfBike = new IDFBikeParameters();
+	public DrtParameters drt = new DrtParameters();
 
 	public static IDFModeParameters buildDefault() {
 		IDFModeParameters parameters = new IDFModeParameters();

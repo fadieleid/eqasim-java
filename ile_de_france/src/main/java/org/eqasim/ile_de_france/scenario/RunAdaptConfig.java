@@ -45,7 +45,7 @@ public class RunAdaptConfig {
 				.get(DiscreteModeChoiceConfigGroup.GROUP_NAME);
 
 		dmcConfig.setModeAvailability(IDFModeChoiceModule.MODE_AVAILABILITY_NAME);
-		dmcConfig.setSelector("Maximum");
+		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
 
 		// Add bicycle to cached modes
@@ -63,6 +63,11 @@ public class RunAdaptConfig {
 
 		// Configure trip constraints
 		dmcConfig.setTripConstraints(Arrays.asList("DrtWalkConstraint", "OutsideConstraint", "TransitWalk"));
+
+		// Add DRT to cached modes
+		cachedModes = new HashSet<>(dmcConfig.getCachedModes());
+		cachedModes.add("drt");
+		dmcConfig.setCachedModes(cachedModes);
 
 		if (eqasimConfig.getSampleSize() == 0.05) {
 			// Adjust flow and storage capacity
