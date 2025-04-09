@@ -13,6 +13,8 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.eqasim.core.components.transit.EqasimTransitQSimModule;
+import org.eqasim.core.components.config.EqasimConfigGroup;
 
 public class RunSimulation {
 	static public void main(String[] args) throws ConfigurationException {
@@ -46,10 +48,15 @@ public class RunSimulation {
 			MultiModeDrtConfigGroup multiModeDrtConfig = MultiModeDrtConfigGroup.get(config);
 			controller.configureQSimComponents(components -> {
 				DvrpQSimComponents.activateAllModes(multiModeDrtConfig).configure(components);
+				
+				// Configure transit module
+				EqasimConfigGroup eqasimConfig = EqasimConfigGroup.get(config);
+				eqasimConfig.setUseScheduleBasedTransport(true);
+				EqasimTransitQSimModule.configure(components, config);
 			});
 		}
 
-		{ // Add overrides for Corsica + DRT
+		{ // Add overrides for DRT
 			controller.addOverridingModule(new IDFModeChoiceModule(cmd));
 		}
 
