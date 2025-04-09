@@ -10,6 +10,8 @@ import org.eqasim.core.simulation.mode_choice.ParameterDefinition;
 import org.eqasim.core.simulation.mode_choice.parameters.ModeParameters;
 import org.eqasim.core.simulation.mode_choice.tour_finder.ActivityTourFinderWithExcludedActivities;
 import org.eqasim.core.simulation.modes.drt.mode_choice.utilities.estimators.DrtUtilityEstimator;
+import org.eqasim.core.simulation.modes.drt.mode_choice.predictors.DrtPredictor;
+import org.eqasim.core.simulation.modes.drt.mode_choice.predictors.DefaultDrtPredictor;
 import org.eqasim.core.simulation.mode_choice.cost.ZeroCostModel;
 import org.eqasim.ile_de_france.mode_choice.costs.IDFCarCostModel;
 import org.eqasim.ile_de_france.mode_choice.parameters.IDFCostParameters;
@@ -26,7 +28,6 @@ import org.matsim.contribs.discrete_mode_choice.modules.config.DiscreteModeChoic
 import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
 import org.matsim.core.config.CommandLine;
 import org.matsim.core.config.CommandLine.ConfigurationException;
-import org.matsim.core.config.Config;
 
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -64,6 +65,7 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 		bindUtilityEstimator(BIKE_ESTIMATOR_NAME).to(IDFBikeUtilityEstimator.class);
 		bindUtilityEstimator(DRT_ESTIMATOR_NAME).to(DrtUtilityEstimator.class);
 		bind(IDFSpatialPredictor.class);
+		bind(DrtPredictor.class).to(DefaultDrtPredictor.class);
 
 		bind(ModeParameters.class).to(IDFModeParameters.class);
 
@@ -109,7 +111,7 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 
 	@Provides
 	@Singleton
-	public MultiModeDrtConfigGroup provideMultiModeDrtConfigGroup(Config config) {
-		return MultiModeDrtConfigGroup.get(config);
+	public IDFModeAvailability provideIDFModeAvailability(MultiModeDrtConfigGroup multiModeDrtConfigGroup) {
+		return new IDFModeAvailability(multiModeDrtConfigGroup);
 	}
 }

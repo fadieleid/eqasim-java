@@ -48,6 +48,10 @@ public class RunAdaptConfig {
 		dmcConfig.setSelector("MultinomialLogit");
 		// Calibration results for 5%
 
+		// Set up choice model
+		eqasimConfig.setCostModel("drt", "ZeroCostModel");
+		eqasimConfig.setEstimator("drt", "DrtUtilityEstimator");
+
 		// Add bicycle to cached modes
 		Set<String> cachedModes = new HashSet<>(dmcConfig.getCachedModes());
 		cachedModes.add("bicycle");
