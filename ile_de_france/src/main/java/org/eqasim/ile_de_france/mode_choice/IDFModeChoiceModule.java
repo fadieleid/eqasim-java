@@ -10,6 +10,7 @@ import org.eqasim.core.simulation.mode_choice.ParameterDefinition;
 import org.eqasim.core.simulation.mode_choice.parameters.ModeParameters;
 import org.eqasim.core.simulation.mode_choice.tour_finder.ActivityTourFinderWithExcludedActivities;
 import org.eqasim.core.simulation.modes.drt.mode_choice.utilities.estimators.DrtUtilityEstimator;
+import org.eqasim.core.simulation.mode_choice.cost.ZeroCostModel;
 import org.eqasim.ile_de_france.mode_choice.costs.IDFCarCostModel;
 import org.eqasim.ile_de_france.mode_choice.parameters.IDFCostParameters;
 import org.eqasim.ile_de_france.mode_choice.parameters.IDFModeParameters;
@@ -18,11 +19,14 @@ import org.eqasim.ile_de_france.mode_choice.utilities.estimators.IDFCarUtilityEs
 import org.eqasim.ile_de_france.mode_choice.utilities.predictors.IDFPersonPredictor;
 import org.eqasim.ile_de_france.mode_choice.utilities.predictors.IDFSpatialPredictor;
 import org.eqasim.ile_de_france.munich.MunichPtCostModel;
+import org.matsim.api.core.v01.TransportMode;
 import org.matsim.contribs.discrete_mode_choice.components.tour_finder.ActivityTourFinder;
 import org.matsim.contribs.discrete_mode_choice.modules.config.ActivityTourFinderConfigGroup;
 import org.matsim.contribs.discrete_mode_choice.modules.config.DiscreteModeChoiceConfigGroup;
+import org.matsim.contrib.drt.run.MultiModeDrtConfigGroup;
 import org.matsim.core.config.CommandLine;
 import org.matsim.core.config.CommandLine.ConfigurationException;
+import org.matsim.core.config.Config;
 
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -34,11 +38,11 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 
 	public static final String CAR_COST_MODEL_NAME = "IDFCarCostModel";
 	public static final String PT_COST_MODEL_NAME = "MunichPtCostModel";
+	public static final String DRT_COST_MODEL_NAME = "ZeroCostModel";
 
 	public static final String CAR_ESTIMATOR_NAME = "IDFCarUtilityEstimator";
 	public static final String BIKE_ESTIMATOR_NAME = "IDFBikeUtilityEstimator";
 	public static final String DRT_ESTIMATOR_NAME = "DrtUtilityEstimator";
-
 
 	public static final String ISOLATED_OUTSIDE_TOUR_FINDER_NAME = "IsolatedOutsideTrips";
 
@@ -54,6 +58,7 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 
 		bindCostModel(CAR_COST_MODEL_NAME).to(IDFCarCostModel.class);
 		bindCostModel(PT_COST_MODEL_NAME).to(MunichPtCostModel.class);
+		bindCostModel(TransportMode.drt).to(ZeroCostModel.class);
 
 		bindUtilityEstimator(CAR_ESTIMATOR_NAME).to(IDFCarUtilityEstimator.class);
 		bindUtilityEstimator(BIKE_ESTIMATOR_NAME).to(IDFBikeUtilityEstimator.class);
@@ -63,6 +68,9 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 		bind(ModeParameters.class).to(IDFModeParameters.class);
 
 		bindTourFinder(ISOLATED_OUTSIDE_TOUR_FINDER_NAME).to(ActivityTourFinderWithExcludedActivities.class);
+
+		// Ensure DRT mode is properly bound
+		bind(IDFModeAvailability.class).asEagerSingleton();
 	}
 
 	@Provides
@@ -97,5 +105,11 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 	public ActivityTourFinderWithExcludedActivities provideActivityTourFinderWithExcludedActivities(DiscreteModeChoiceConfigGroup dmcConfig) {
 		ActivityTourFinderConfigGroup config = dmcConfig.getActivityTourFinderConfigGroup();
 		return new ActivityTourFinderWithExcludedActivities(List.of("outside"), new ActivityTourFinder(config.getActivityTypes()));
+	}
+
+	@Provides
+	@Singleton
+	public MultiModeDrtConfigGroup provideMultiModeDrtConfigGroup(Config config) {
+		return MultiModeDrtConfigGroup.get(config);
 	}
 }

@@ -10,7 +10,6 @@ import org.eqasim.core.simulation.termination.EqasimTerminationConfigGroup;
 import org.eqasim.ile_de_france.IDFConfigurator;
 import org.eqasim.ile_de_france.mode_choice.IDFModeChoiceModule;
 import org.matsim.api.core.v01.TransportMode;
-import org.matsim.contribs.discrete_mode_choice.model.DiscreteModeChoiceModel;
 import org.matsim.contribs.discrete_mode_choice.modules.config.DiscreteModeChoiceConfigGroup;
 import org.matsim.core.config.CommandLine;
 import org.matsim.core.config.CommandLine.ConfigurationException;
@@ -35,6 +34,7 @@ public class RunAdaptConfig {
 
 		eqasimConfig.setCostModel(TransportMode.car, IDFModeChoiceModule.CAR_COST_MODEL_NAME);
 		eqasimConfig.setCostModel(TransportMode.pt, IDFModeChoiceModule.PT_COST_MODEL_NAME);
+		eqasimConfig.setCostModel(TransportMode.drt, "ZeroCostModel");
 
 		eqasimConfig.setEstimator(TransportMode.car, IDFModeChoiceModule.CAR_ESTIMATOR_NAME);
 		eqasimConfig.setEstimator(TransportMode.bike, IDFModeChoiceModule.BIKE_ESTIMATOR_NAME);
@@ -100,5 +100,17 @@ public class RunAdaptConfig {
 		ActivityParams bicycleInteractionParams = new ActivityParams("bicycle interaction");
 		bicycleInteractionParams.setTypicalDuration(1.0);
 		scoringConfig.addActivityParams(bicycleInteractionParams);
+
+		// Add DRT mode parameters
+		ModeParams drtModeParams = new ModeParams("drt");
+		drtModeParams.setConstant(0.0);
+		drtModeParams.setMarginalUtilityOfDistance(0.0);
+		drtModeParams.setMarginalUtilityOfTraveling(-0.5); // Make it more attractive than other modes
+		scoringConfig.addModeParams(drtModeParams);
+
+		// Add DRT interaction activity
+		ActivityParams drtInteractionParams = new ActivityParams("drt interaction");
+		drtInteractionParams.setTypicalDuration(1.0);
+		scoringConfig.addActivityParams(drtInteractionParams);
 	}
 }
