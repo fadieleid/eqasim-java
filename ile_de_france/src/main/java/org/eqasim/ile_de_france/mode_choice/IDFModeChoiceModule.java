@@ -70,9 +70,6 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 		bind(ModeParameters.class).to(IDFModeParameters.class);
 
 		bindTourFinder(ISOLATED_OUTSIDE_TOUR_FINDER_NAME).to(ActivityTourFinderWithExcludedActivities.class);
-
-		// Ensure DRT mode is properly bound
-		bind(IDFModeAvailability.class).asEagerSingleton();
 	}
 
 	@Provides
