@@ -80,8 +80,8 @@ public class AdaptConfigForDrt {
             }
             drtConfigGroup.stopDuration = 15.0;
             DefaultDrtOptimizationConstraintsSet defaultDrtOptimizationConstraintsSet = (DefaultDrtOptimizationConstraintsSet) drtConfigGroup.addOrGetDrtOptimizationConstraintsParams().addOrGetDefaultDrtOptimizationConstraintsSet();
-            defaultDrtOptimizationConstraintsSet.maxWaitTime = 600;
-            defaultDrtOptimizationConstraintsSet.maxTravelTimeAlpha= 1.5;
+            defaultDrtOptimizationConstraintsSet.maxWaitTime = 1200;
+            defaultDrtOptimizationConstraintsSet.maxTravelTimeAlpha= 2;
             defaultDrtOptimizationConstraintsSet.maxTravelTimeBeta = 300.0;
             drtConfigGroup.vehiclesFile  = vehiclesPathByDrtMode.get(drtMode);
 
