@@ -12,12 +12,6 @@ public class IDFModeParameters extends ModeParameters {
 		public double betaInsideUrbanArea;
 	}
 
-	public static class DrtParameters {
-		public double alpha_u = 0.0; // Base utility
-		public double betaTravelTime_u_min = -0.017; // Less negative than car (-1.0)
-		public double betaWaitingTime_u_min = -0.0484; // Less negative than PT 
-		public double betaAccessEgressTime_u_min = -0.0804; // Less negative than PT 
-	}
 
 	public final IDFCarParameters idfCar = new IDFCarParameters();
 	public final IDFBikeParameters idfBike = new IDFBikeParameters();
@@ -40,6 +34,12 @@ public class IDFModeParameters extends ModeParameters {
 
 		parameters.idfCar.betaInsideUrbanArea = -0.5;
 		parameters.idfCar.betaCrossingUrbanArea = -1.0;
+
+		// Drt
+		parameters.drt.alpha_u = 0.0;
+		parameters.drt.betaTravelTime_u_min = -0.06;
+		parameters.drt.betaWaitingTime_u_min = -0.0484;
+		parameters.drt.betaAccessEgressTime_u_min = -0.0804;	
 
 		// PT
 		parameters.pt.alpha_u = 0.0;
