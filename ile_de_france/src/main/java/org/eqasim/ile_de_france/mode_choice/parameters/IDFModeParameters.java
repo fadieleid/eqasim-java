@@ -42,14 +42,14 @@ public class IDFModeParameters extends ModeParameters {
 		parameters.drt.betaAccessEgressTime_u_min = -0.0804;		//base value = -0.0804
 
 		// PT
-		parameters.pt.alpha_u = 1.0;								//base value = 0.0
+		parameters.pt.alpha_u = 0.0;								//base value = 0.0
 		parameters.pt.betaLineSwitch_u = -0.17;						//base value = -0.17
 		parameters.pt.betaInVehicleTime_u_min = -0.017;				//base value = -0.017
 		parameters.pt.betaWaitingTime_u_min = -0.0484;				//base value = -0.0484
 		parameters.pt.betaAccessEgressTime_u_min = -0.0804;			//base value = -0.0804
 
 		// Bike
-		parameters.bike.alpha_u = -2.0;								//base value = -2.0
+		parameters.bike.alpha_u = -1.0;								//base value = -2.0
 		parameters.bike.betaTravelTime_u_min = -0.05;				//base value = -0.05
 		parameters.bike.betaAgeOver18_u_a = -0.0496;				//base value = -0.0496
 
