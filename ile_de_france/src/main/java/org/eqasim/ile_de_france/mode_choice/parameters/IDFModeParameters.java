@@ -36,13 +36,13 @@ public class IDFModeParameters extends ModeParameters {
 		parameters.idfCar.betaCrossingUrbanArea = -1.0;				//base value = -1.0
 
 		// Drt
-		parameters.drt.alpha_u = 1.2;								//base value = 0.0
+		parameters.drt.alpha_u = 0.0;								//base value = 0.0
 		parameters.drt.betaTravelTime_u_min = -0.2;					//base value = -0.2
 		parameters.drt.betaWaitingTime_u_min = -0.1;				//base value = -0.1
 		parameters.drt.betaAccessEgressTime_u_min = -0.0804;		//base value = -0.0804
 
 		// PT
-		parameters.pt.alpha_u = 0.0;								//base value = 0.0
+		parameters.pt.alpha_u = 1.0;								//base value = 0.0
 		parameters.pt.betaLineSwitch_u = -0.17;						//base value = -0.17
 		parameters.pt.betaInVehicleTime_u_min = -0.017;				//base value = -0.017
 		parameters.pt.betaWaitingTime_u_min = -0.0484;				//base value = -0.0484
