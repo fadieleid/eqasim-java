@@ -26,7 +26,7 @@ public class IDFModeParameters extends ModeParameters {
 		parameters.referenceEuclideanDistance_km = 40.0;			//base value = 40.0
 
 		// Car
-		parameters.car.alpha_u = 1.35;								//base value = 1.35
+		parameters.car.alpha_u = 2.00;								//base value = 1.35
 		parameters.car.betaTravelTime_u_min = -0.06;				//base value = -0.06
 
 		parameters.car.additionalAccessEgressWalkTime_min = 4.0;	//base value = 4.0
