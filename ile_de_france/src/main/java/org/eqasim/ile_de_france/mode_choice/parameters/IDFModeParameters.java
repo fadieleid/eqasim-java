@@ -56,7 +56,7 @@ public class IDFModeParameters extends ModeParameters {
 		parameters.idfBike.betaInsideUrbanArea = 1.5;				//base value = 1.5
 
 		// Walk
-		parameters.walk.alpha_u = 2.00;								//base value = 1.43
+		parameters.walk.alpha_u = 1.43;								//base value = 1.43
 		parameters.walk.betaTravelTime_u_min = -0.15;				//base value = -0.15
 
 		return parameters;
