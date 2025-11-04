@@ -39,7 +39,7 @@ public class IDFModeParameters extends ModeParameters {
 		parameters.drt.alpha_u = 0.0;								//base value = 0.0
 		parameters.drt.betaTravelTime_u_min = -0.2;					//base value = -0.2
 		parameters.drt.betaWaitingTime_u_min = -0.1;				//base value = -0.1
-		parameters.drt.betaAccessEgressTime_u_min = 1.0;		//base value = -0.0804
+		parameters.drt.betaAccessEgressTime_u_min = -0.0804;		//base value = -0.0804
 
 		// PT
 		parameters.pt.alpha_u = 0.0;								//base value = 0.0
