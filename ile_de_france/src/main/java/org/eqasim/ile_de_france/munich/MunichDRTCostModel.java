@@ -1,4 +1,4 @@
-package org.eqasim.core.simulation.mode_choice.cost;
+package org.eqasim.ile_de_france.munich;
 
 import java.util.List;
 
