@@ -59,7 +59,7 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 
 		bindCostModel(CAR_COST_MODEL_NAME).to(IDFCarCostModel.class);
 		bindCostModel(PT_COST_MODEL_NAME).to(MunichPtCostModel.class);
-		bindCostModel(TransportMode.drt).to(ZeroCostModel.class);
+		bindCostModel(TransportMode.drt).to(MunichDRTCostModel.class);
 
 		bindUtilityEstimator(CAR_ESTIMATOR_NAME).to(IDFCarUtilityEstimator.class);
 		bindUtilityEstimator(BIKE_ESTIMATOR_NAME).to(IDFBikeUtilityEstimator.class);
