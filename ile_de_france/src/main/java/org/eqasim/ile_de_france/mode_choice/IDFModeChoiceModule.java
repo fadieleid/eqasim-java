@@ -39,7 +39,7 @@ public class IDFModeChoiceModule extends AbstractEqasimExtension {
 
 	public static final String CAR_COST_MODEL_NAME = "IDFCarCostModel";
 	public static final String PT_COST_MODEL_NAME = "MunichPtCostModel";
-	public static final String DRT_COST_MODEL_NAME = "IDFPTCostModel";
+	public static final String DRT_COST_MODEL_NAME = "ZeroCostModel";
 
 	public static final String CAR_ESTIMATOR_NAME = "IDFCarUtilityEstimator";
 	public static final String BIKE_ESTIMATOR_NAME = "IDFBikeUtilityEstimator";
