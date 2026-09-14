@@ -41,7 +41,7 @@ public class BavariaModeParameters extends ModeParameters {
 		parameters.carPassenger.betaInVehicleTravelTime_u_min = -0.069976;
 
 		// PT
-		parameters.pt.alpha_u = 0.0;
+		parameters.pt.alpha_u = 0.2;
 		parameters.pt.betaLineSwitch_u = -0.417658;
 		parameters.pt.betaInVehicleTime_u_min = -0.025501;
 		parameters.pt.betaWaitingTime_u_min = -0.021801;
@@ -56,6 +56,12 @@ public class BavariaModeParameters extends ModeParameters {
 		// Walk
 		parameters.walk.alpha_u = 1.8; // 1.685152;
 		parameters.walk.betaTravelTime_u_min = -0.162285;
+
+		// DRT
+		parameters.drt.alpha_u = 0.4;
+		parameters.drt.betaTravelTime_u_min = -0.1;
+		parameters.drt.betaWaitingTime_u_min = -0.1;
+		parameters.drt.betaAccessEgressTime_u_min = 0;
 
 		return parameters;
 	}
