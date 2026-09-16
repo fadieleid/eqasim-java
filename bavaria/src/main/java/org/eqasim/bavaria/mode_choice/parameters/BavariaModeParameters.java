@@ -50,7 +50,7 @@ public class BavariaModeParameters extends ModeParameters {
 		parameters.bavariaPt.onlyBus_u = -1.416309;
 
 		// Bike
-		parameters.bike.alpha_u = -0.5; // -2.927596;
+		parameters.bike.alpha_u = -1.2; // -2.927596; -0.5
 		parameters.bike.betaTravelTime_u_min = -0.093485;
 
 		// Walk
