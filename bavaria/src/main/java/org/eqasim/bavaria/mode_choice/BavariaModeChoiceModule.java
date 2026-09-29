@@ -22,11 +22,13 @@ import org.eqasim.core.simulation.mode_choice.AbstractEqasimExtension;
 import org.eqasim.core.simulation.mode_choice.ParameterDefinition;
 import org.eqasim.core.simulation.mode_choice.parameters.ModeParameters;
 import org.eqasim.core.simulation.mode_choice.tour_finder.ActivityTourFinderWithExcludedActivities;
+import org.eqasim.core.simulation.modes.feeder_drt.mode_choice.FeederDrtModeAvailabilityWrapper;
 import org.matsim.contribs.discrete_mode_choice.components.tour_finder.ActivityTourFinder;
 import org.matsim.contribs.discrete_mode_choice.modules.config.ActivityTourFinderConfigGroup;
 import org.matsim.contribs.discrete_mode_choice.modules.config.DiscreteModeChoiceConfigGroup;
 import org.matsim.core.config.CommandLine;
 import org.matsim.core.config.CommandLine.ConfigurationException;
+import org.matsim.core.config.Config;
 
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -57,7 +59,10 @@ public class BavariaModeChoiceModule extends AbstractEqasimExtension {
 
 	@Override
 	protected void installEqasimExtension() {
-		bindModeAvailability(MODE_AVAILABILITY_NAME).to(BavariaModeAvailability.class);
+		// Standalone drt modes (e.g. drt_1) come from BavariaModeAvailability via
+		// eqasim:additionalAvailableModes. The wrapper then adds each feeder drt mode
+		// (e.g. feeder_drt_1) whenever its pt mode and its drt mode are available.
+		bindModeAvailability(MODE_AVAILABILITY_NAME).to(FeederDrtModeAvailabilityWrapper.class);
 
 		bind(BavariaPersonPredictor.class);
 		bind(BavariaCarPassengerPredictor.class);
@@ -82,6 +87,13 @@ public class BavariaModeChoiceModule extends AbstractEqasimExtension {
 	@Singleton
 	public BavariaModeAvailability provideModeAvailability(EqasimConfigGroup config) {
 		return new BavariaModeAvailability(config.getAdditionalAvailableModes());
+	}
+
+	@Provides
+	@Singleton
+	public FeederDrtModeAvailabilityWrapper provideFeederDrtModeAvailabilityWrapper(Config config,
+			BavariaModeAvailability modeAvailability) {
+		return new FeederDrtModeAvailabilityWrapper(config, modeAvailability);
 	}
 
 	@Provides

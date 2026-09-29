@@ -34,6 +34,15 @@ import com.google.common.collect.Sets;
 public class AdaptConfigForFeederDrt {
 
     public static void adapt(Config config, Map<String, String> basePtModes, Map<String, String> baseDrtModes, Map<String, String> utilityEstimators, Map<String, String> accessEgressTransitStopModes, Map<String, String> accessEgressTransitStopIds, boolean updateTerminationModes) {
+        adapt(config, basePtModes, baseDrtModes, utilityEstimators, accessEgressTransitStopModes, accessEgressTransitStopIds, updateTerminationModes, false);
+    }
+
+    /**
+     * @param keepBaseDrtModes if true, the base drt modes (e.g. drt_1) stay available in the mode choice, so that
+     *                         they are offered as standalone modes next to the feeder modes (e.g. feeder_drt_1).
+     *                         If false (legacy behaviour), the base drt modes are only used as access/egress for the feeders.
+     */
+    public static void adapt(Config config, Map<String, String> basePtModes, Map<String, String> baseDrtModes, Map<String, String> utilityEstimators, Map<String, String> accessEgressTransitStopModes, Map<String, String> accessEgressTransitStopIds, boolean updateTerminationModes, boolean keepBaseDrtModes) {
         if(!config.getModules().containsKey(MultiModeDrtConfigGroup.GROUP_NAME)) {
             throw new IllegalStateException(String.format("Cannot add module '%s' if module '%s' is not present already. You can use '%s' to configure it.", MultiModeFeederDrtConfigGroup.GROUP_NAME, MultiModeDrtConfigGroup.GROUP_NAME, AdaptConfigForDrt.class.getCanonicalName()));
         }
@@ -57,7 +66,11 @@ public class AdaptConfigForFeederDrt {
         EqasimConfigGroup eqasimConfig = EqasimConfigGroup.get(config);
         Set<String> availableModes = new HashSet<>(eqasimConfig.getAdditionalAvailableModes());
         availableModes.addAll(baseDrtModes.keySet()); // add new modes
-        availableModes.removeAll(baseDrtModes.values());
+        if (keepBaseDrtModes) {
+            availableModes.addAll(baseDrtModes.values()); // standalone drt stays available
+        } else {
+            availableModes.removeAll(baseDrtModes.values());
+        }
         eqasimConfig.setAdditionalAvailableModes(availableModes);
 
         // Update termination modes
@@ -66,6 +79,9 @@ public class AdaptConfigForFeederDrt {
             List<String> terminationModes = new ArrayList<>(terminationConfig.getModes());
             terminationModes.removeAll(baseDrtModes.values());
             terminationModes.addAll(baseDrtModes.keySet());
+            if (keepBaseDrtModes) {
+                terminationModes.addAll(new HashSet<>(baseDrtModes.values()));
+            }
             terminationConfig.setModes(terminationModes);
         }
 
@@ -147,6 +163,7 @@ public class AdaptConfigForFeederDrt {
                 .allowOptions("access-egress-transit-stop-modes")
                 .allowOptions("access-egress-transit-stop-ids")
                 .allowOptions("update-termination-modes")
+                .allowOptions("keep-base-drt-modes")
                 .allowOptions(EqasimConfigurator.CONFIGURATOR)
                 .build();
 
@@ -174,7 +191,8 @@ public class AdaptConfigForFeederDrt {
         configurator.updateConfig(config);
 
         boolean updateTerminationModes = cmd.getOption("update-termination-modes").map(Boolean::parseBoolean).orElse(config.getModules().containsKey(EqasimTerminationConfigGroup.GROUP_NAME));
-        adapt(config, info.get("base-pt-modes"), info.get("base-drt-modes"), info.get("estimators"), info.get("access-egress-transit-stop-modes"), info.get("access-egress-transit-stop-ids"), updateTerminationModes);
+        boolean keepBaseDrtModes = cmd.getOption("keep-base-drt-modes").map(Boolean::parseBoolean).orElse(false);
+        adapt(config, info.get("base-pt-modes"), info.get("base-drt-modes"), info.get("estimators"), info.get("access-egress-transit-stop-modes"), info.get("access-egress-transit-stop-ids"), updateTerminationModes, keepBaseDrtModes);
 
         ConfigUtils.writeConfig(config, outputConfigPath);
     }
