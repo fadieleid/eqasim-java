@@ -20,6 +20,8 @@ import org.eqasim.core.simulation.mode_choice.EqasimModeChoiceModule;
 import org.eqasim.core.simulation.mode_choice.constraints.leg_time.LegTimeConstraintConfigGroup;
 import org.eqasim.core.simulation.mode_choice.constraints.leg_time.LegTimeConstraintModule;
 import org.eqasim.core.simulation.mode_choice.constraints.leg_time.LegTimeConstraintSingleLegConfigGroup;
+import org.eqasim.core.simulation.modes.drt.mode_choice.constraints.DrtMaxDistanceConstraintConfigGroup;
+import org.eqasim.core.simulation.modes.drt.mode_choice.constraints.DrtMaxDistanceConstraintModule;
 import org.eqasim.core.simulation.termination.EqasimTerminationConfigGroup;
 import org.matsim.contrib.common.zones.systems.grid.square.SquareGridZoneSystemParams;
 import org.matsim.contrib.drt.optimizer.constraints.DrtOptimizationConstraintsSetImpl;
@@ -49,7 +51,7 @@ import com.google.common.collect.Sets;
 
 public class AdaptConfigForDrt {
 
-    public static void adapt(Config config, Map<String, String> vehiclesPathByDrtMode, Map<String, String> operationalSchemes, Map<String, String> drtUtilityEstimators, Map<String, String> drtCostModels, Map<String, String> addLegTimeConstraint, String qsimEndtime, boolean updateTerminationModes) {
+    public static void adapt(Config config, Map<String, String> vehiclesPathByDrtMode, Map<String, String> operationalSchemes, Map<String, String> drtUtilityEstimators, Map<String, String> drtCostModels, Map<String, String> addLegTimeConstraint, Map<String, String> maxBeelineDistances, String qsimEndtime, boolean updateTerminationModes) {
         if(!config.getModules().containsKey(DvrpConfigGroup.GROUP_NAME)) {
             config.addModule(new DvrpConfigGroup());
         }
@@ -80,6 +82,7 @@ public class AdaptConfigForDrt {
         }
 
         boolean serviceAreaDrt = false;
+        boolean maxDistanceDrt = false;
 
         for(String drtMode: vehiclesPathByDrtMode.keySet()) {
             DrtConfigGroup drtConfigGroup = new DrtConfigGroup();
@@ -134,6 +137,12 @@ public class AdaptConfigForDrt {
                 legTimeConstraintSingleLegConfigGroup.addParameterSet(timeSlotConfigGroup);
                 legTimeConstraintSingleLegConfigGroups.add(legTimeConstraintSingleLegConfigGroup);
             }
+
+            double maxBeelineDistance = Double.parseDouble(maxBeelineDistances.get(drtMode));
+            if(Double.isFinite(maxBeelineDistance)) {
+                DrtMaxDistanceConstraintConfigGroup.getOrCreate(config).setMaxBeelineDistance(drtMode, maxBeelineDistance);
+                maxDistanceDrt = true;
+            }
         }
 
         Set<String> tripConstraints = new HashSet<>(dmcConfig.getTripConstraints());
@@ -145,6 +154,9 @@ public class AdaptConfigForDrt {
         tripConstraints.add(EqasimModeChoiceModule.DRT_WALK_CONSTRAINT);
         if(serviceAreaDrt) {
             tripConstraints.add(EqasimModeChoiceModule.DRT_SERVICE_AREA_CONSTRAINT);
+        }
+        if(maxDistanceDrt) {
+            tripConstraints.add(DrtMaxDistanceConstraintModule.DRT_MAX_DISTANCE_CONSTRAINT_NAME);
         }
         dmcConfig.setTripConstraints(tripConstraints);
 
@@ -190,6 +202,7 @@ public class AdaptConfigForDrt {
                 .allowOptions("cost-models", "estimators")
                 .allowOptions("qsim-endtime")
                 .allowOptions("add-leg-time-constraint")
+                .allowOptions("max-beeline-distances")
                 .allowOptions("update-termination-modes")
                 .build();
 
@@ -203,6 +216,8 @@ public class AdaptConfigForDrt {
         String[] estimator = cmd.getOption("estimators").orElse(EqasimModeChoiceModule.DRT_ESTIMATOR_NAME).split(",");
         String[] operationalSchemes = cmd.getOption("operational-schemes").orElse(DrtConfigGroup.OperationalScheme.door2door.toString()).split(",");
         String[] addLegTimeConstraint = cmd.getOption("add-leg-time-constraint").orElse("false").split(",");
+        // beeline distance [m], Infinity means no limit
+        String[] maxBeelineDistances = cmd.getOption("max-beeline-distances").orElse("Infinity").split(",");
 
         Map<String, String[]> toExtract = new HashMap<>();
         toExtract.put("vehicles-paths", Arrays.stream(vehiclesPath).map(p -> Path.of(outputConfigPath).getParent().toAbsolutePath().relativize(Path.of(p).toAbsolutePath()).toString()).toArray(String[]::new));
@@ -210,6 +225,7 @@ public class AdaptConfigForDrt {
         toExtract.put("estimators", estimator);
         toExtract.put("operational-schemes", operationalSchemes);
         toExtract.put("add-leg-time-constraint", addLegTimeConstraint);
+        toExtract.put("max-beeline-distances", maxBeelineDistances);
 
         Map<String, Map<String, String>> info = extractDrtInfo(modeNames, toExtract);
 
@@ -220,7 +236,7 @@ public class AdaptConfigForDrt {
         configurator.updateConfig(config);
         
         boolean updateTerminationModes = cmd.getOption("update-termination-modes").map(Boolean::parseBoolean).orElse(config.getModules().containsKey(EqasimTerminationConfigGroup.GROUP_NAME));
-        adapt(config, info.get("vehicles-paths"), info.get("operational-schemes"), info.get("estimators"), info.get("cost-models"), info.get("add-leg-time-constraint"), qsimEndtime, updateTerminationModes);
+        adapt(config, info.get("vehicles-paths"), info.get("operational-schemes"), info.get("estimators"), info.get("cost-models"), info.get("add-leg-time-constraint"), info.get("max-beeline-distances"), qsimEndtime, updateTerminationModes);
 
         cmd.applyConfiguration(config);
 

@@ -22,7 +22,6 @@ import org.eqasim.core.simulation.mode_choice.AbstractEqasimExtension;
 import org.eqasim.core.simulation.mode_choice.ParameterDefinition;
 import org.eqasim.core.simulation.mode_choice.parameters.ModeParameters;
 import org.eqasim.core.simulation.mode_choice.tour_finder.ActivityTourFinderWithExcludedActivities;
-import org.eqasim.core.simulation.modes.drt.mode_choice.constraints.DrtMaxDistanceConstraint;
 import org.eqasim.core.simulation.modes.feeder_drt.mode_choice.FeederDrtModeAvailabilityWrapper;
 import org.matsim.contribs.discrete_mode_choice.components.tour_finder.ActivityTourFinder;
 import org.matsim.contribs.discrete_mode_choice.modules.config.ActivityTourFinderConfigGroup;
@@ -54,8 +53,6 @@ public class BavariaModeChoiceModule extends AbstractEqasimExtension {
 
 	public static final String ISOLATED_OUTSIDE_TOUR_FINDER_NAME = "IsolatedOutsideTrips";
 
-	public static final String DRT_MAX_DISTANCE_CONSTRAINT_NAME = "DrtMaxDistanceConstraint";
-
 	public BavariaModeChoiceModule(CommandLine commandLine) {
 		this.commandLine = commandLine;
 	}
@@ -84,15 +81,6 @@ public class BavariaModeChoiceModule extends AbstractEqasimExtension {
 		bind(ModeParameters.class).to(BavariaModeParameters.class);
 
 		bindTourFinder(ISOLATED_OUTSIDE_TOUR_FINDER_NAME).to(ActivityTourFinderWithExcludedActivities.class);
-
-		bindTripConstraintFactory(DRT_MAX_DISTANCE_CONSTRAINT_NAME).to(DrtMaxDistanceConstraint.Factory.class);
-	}
-
-	@Provides
-	@Singleton
-	public DrtMaxDistanceConstraint.Factory provideDrtMaxDistanceConstraintFactory(Config config,
-			BavariaModeParameters parameters) {
-		return new DrtMaxDistanceConstraint.Factory(config, parameters.bavariaDrt.maxBeelineDistance_km * 1e3);
 	}
 
 	@Provides

@@ -24,6 +24,8 @@ import org.eqasim.core.simulation.mode_choice.EqasimModeChoiceModule;
 import org.eqasim.core.simulation.mode_choice.constraints.leg_time.LegTimeConstraintConfigGroup;
 import org.eqasim.core.simulation.mode_choice.constraints.leg_time.LegTimeConstraintModule;
 import org.eqasim.core.simulation.mode_choice.epsilon.EpsilonModule;
+import org.eqasim.core.simulation.modes.drt.mode_choice.constraints.DrtMaxDistanceConstraintConfigGroup;
+import org.eqasim.core.simulation.modes.drt.mode_choice.constraints.DrtMaxDistanceConstraintModule;
 import org.eqasim.core.simulation.modes.feeder_drt.MultiModeFeederDrtModule;
 import org.eqasim.core.simulation.modes.feeder_drt.config.MultiModeFeederDrtConfigGroup;
 import org.eqasim.core.simulation.modes.feeder_drt.mode_choice.EqasimFeederDrtModeChoiceModule;
@@ -145,6 +147,10 @@ public abstract class EqasimConfigurator {
 		// Leg time constraint functionality
 		registerConfigGroup(new LegTimeConstraintConfigGroup(), true);
 		registerModule(new LegTimeConstraintModule(), LegTimeConstraintConfigGroup.GROUP_NAME);
+
+		// Drt max distance constraint functionality
+		registerConfigGroup(new DrtMaxDistanceConstraintConfigGroup(), true);
+		registerModule(new DrtMaxDistanceConstraintModule(), DrtMaxDistanceConstraintConfigGroup.GROUP_NAME);
 
 		// Emissions
 		registerConfigGroup(new EmissionsConfigGroup(), true);

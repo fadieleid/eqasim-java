@@ -18,12 +18,6 @@ public class BavariaModeParameters extends ModeParameters {
 
 	public final BavariaPtParameters bavariaPt = new BavariaPtParameters();
 
-	public class BavariaDrtParameters {
-		public double maxBeelineDistance_km;
-	}
-
-	public final BavariaDrtParameters bavariaDrt = new BavariaDrtParameters();
-
 	public double betaAccessTime_u_min;
 
 	public static BavariaModeParameters buildDefault() {
@@ -68,9 +62,6 @@ public class BavariaModeParameters extends ModeParameters {
 		parameters.drt.betaTravelTime_u_min = -0.2;
 		parameters.drt.betaWaitingTime_u_min = -0.1;
 		parameters.drt.betaAccessEgressTime_u_min = 0;
-
-		// DRT is not available for trips beyond this beeline distance (infinite = no limit)
-		parameters.bavariaDrt.maxBeelineDistance_km = Double.POSITIVE_INFINITY;
 
 		return parameters;
 	}
