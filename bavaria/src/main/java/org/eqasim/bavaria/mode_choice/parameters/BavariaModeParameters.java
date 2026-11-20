@@ -18,6 +18,13 @@ public class BavariaModeParameters extends ModeParameters {
 
 	public final BavariaPtParameters bavariaPt = new BavariaPtParameters();
 
+	public class BavariaDrtParameters {
+		// added to each DRT leg that is part of a feeder trip (not to standalone DRT)
+		public double feederBonus_u;
+	}
+
+	public final BavariaDrtParameters bavariaDrt = new BavariaDrtParameters();
+
 	public double betaAccessTime_u_min;
 
 	public static BavariaModeParameters buildDefault() {
@@ -62,6 +69,9 @@ public class BavariaModeParameters extends ModeParameters {
 		parameters.drt.betaTravelTime_u_min = -0.15;
 		parameters.drt.betaWaitingTime_u_min = -0.15;
 		parameters.drt.betaAccessEgressTime_u_min = 0;
+
+		// Feeder DRT
+		parameters.bavariaDrt.feederBonus_u = 1.5;
 
 		return parameters;
 	}
